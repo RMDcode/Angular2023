@@ -1,0 +1,56 @@
+addRestaurent(restaurentModelObj: RestaurentData,id:number,data:any) 
+  {
+    return this._http.put<any>("http://localhost:3000/posts/"+id,data).pipe(map((res:any)=>{
+      return res;
+    }));  // add logic
+  }
+---------------------------------------------------------------------------------------------
+
+clickAddResto(data:any)
+  {
+    this.formValue.reset();
+    this.showAdd = true;
+    this.showBtn = true;
+    this.restaurentModelObj.id = data.id;
+    this.formValue.controls['id'].setValue(data.id);
+    this.formValue.controls['name'].setValue(data.name);
+    this.formValue.controls['email'].setValue(data.email);
+    this.formValue.controls['mobile'].setValue(data.mobile);
+    this.formValue.controls['address'].setValue(data.address);
+    this.formValue.controls['services'].setValue(data.services);
+
+  }
+ 
+  addRestaurent()
+  {
+    this.restaurentModelObj.name = this.formValue.value.name;
+    this.restaurentModelObj.email = this.formValue.value.email;
+    this.restaurentModelObj.mobile = this.formValue.value.mobile;
+    this.restaurentModelObj.address = this.formValue.value.address;
+    this.restaurentModelObj.services = this.formValue.value.services;
+
+    this.api.postRestaurent(this.restaurentModelObj).subscribe((res:any) => {
+      console.log(res);
+      alert("Restaurent Added Successfully");
+      this.formValue.reset();
+
+      let ref= document.getElementById('close');
+      ref?.click();
+
+      this.getAllData();
+
+    }, (err:any)=>{
+      console.log(err);
+      alert("Restaurent Added Failed!");
+    })
+  }
+
+  getAllData()
+  {
+    this.api.getRestaurent().subscribe((res:any) => {
+      this.allRestaurentData= res;
+    }, (err:any)=>{
+      console.log(err);
+    })
+  }
+
